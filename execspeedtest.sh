@@ -1,53 +1,65 @@
-
-!#/bin/bash
-
+#!/bin/bash
+echo "starting at:  $(date +%Y%m%d_%H%M%S)"
 # execspeedtest.sh
-filename="/tmp/testresults.txt"
+datestampforfilename=$(date +%Y%m%d)
+execlocaloutputfilename="/tmp/speedtestresults.txt"
+echo $execlocaloutputfilename
 
-filename="./sample.txt"
+#execlocaloutputfilename="./sample.txt"
+outputdir=/output
+#make the directory if it doesn't exist... IT SHOULD as it should be mounted to the container for host output.
+[ ! -d $outputdir ] && mkdir $outputdir
+outputfilename="$outputdir"/$datestampforfilename"_speed_test_results.csv"
+echo $outputfilename
 
-hostfilename="/output/speedtesthistory.txt"
+#Check to see if we are creating a new file or appending an old one.  Add the headers if its new...
+headerrow="Date_Time|SourceIP|UsingHost|Download|Upload"
+[ ! -e $outputfilename ] && touch $outputfilename && echo $headerrow >>  $outputfilename
+
 pipechar="|"
-################################/usr/local/bin/speedtest-cli > "$filename"
+/usr/local/bin/speedtest-cli > "$execlocaloutputfilename"
 lineout=$(date +%Y%m%d_%H%M%S)
-echo $lineout
+#echo $lineout
 
 #get the source IP from the output
 val=""
-val=$(grep  'Testing from ' $filename) 
-val=$(echo $val | grep -Po '(?<=\().*(?=\))')
+val=$(grep  'Testing from ' $execlocaloutputfilename) 
+val=$(echo $val | grep --perl-regexp -o '(?<=\().*(?=\))')
 lineout=$lineout$pipechar$val
+echo $lineout
 
 #get the destination host info provided
 val=""
 srch='Hosted by '
-val=$(grep  "$srch" $filename) 
+val=$(grep  "$srch" $execlocaloutputfilename) 
 charstosave=`expr ${#val} - ${#srch}`
-echo $charstosave
+#echo $charstosave
 val=${val: -$charstosave}
-echo $val
+#echo $val
 lineout=$lineout$pipechar$val
-echo $lineout
+#echo $lineout
 
 
 #get the Down speed
 val=""
 srch='Download: '
-val=$(grep  "$srch" $filename) 
+val=$(grep  "$srch" $execlocaloutputfilename) 
 charstosave=`expr ${#val} - ${#srch}`
-echo $charstosave
+#echo $charstosave
 val=${val: -$charstosave}
-echo $val
+#echo $val
 lineout=$lineout$pipechar$val
-echo $lineout
+#echo $lineout
 
 #get the u[] speed
 val=""
 srch='Upload: '
-val=$(grep  "$srch" $filename) 
+val=$(grep  "$srch" $execlocaloutputfilename) 
 charstosave=`expr ${#val} - ${#srch}`
-echo $charstosave
+#echo $charstosave
 val=${val: -$charstosave}
-echo $val
+#echo $val
 lineout=$lineout$pipechar$val
-echo $lineout
+echo $lineout >> $outputfilename
+echo "ended at:  $(date +%Y%m%d_%H%M%S)"
+

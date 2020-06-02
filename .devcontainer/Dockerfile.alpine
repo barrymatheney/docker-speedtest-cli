@@ -1,0 +1,47 @@
+FROM python:2-alpine
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+ARG WORK_DIR=/work
+
+ARG USER=${USERNAME}
+ARG UID=${USER_UID}
+ARG GID=${USER_GID}
+RUN addgroup -g ${GID} ${USER}
+
+# RUN adduser \
+#     --disabled-password \
+#     --gecos "" \
+#     --home "$(pwd)" \
+#     --ingroup "${USER}" \
+#     --no-create-home \
+#     --uid "${UID}" \
+#     "${USER}"
+
+
+
+
+RUN pip install speedtest-cli
+RUN apk update && apk upgrade && apk add bash git bash-doc bash-completion  
+RUN apk add --no-cache grep=3.3-r0
+#RUN /bin/bash/usermod --shell /bin/bash ${USER}
+#  RUN adduser \
+#      --disabled-password \
+#      --gecos "" \
+#      --home "$(pwd)" \
+#      --ingroup "${USER}" \
+# #     --no-create-home \
+#      --uid "${UID}" \
+#      "${USER}"
+
+
+# RUN apk --no-cache add shadow \
+#   && usermod -u 2500  ${USER} \
+#   && groupmod -g 2500  ${USER}
+
+
+# USER ${USER}
+WORKDIR ${WORK_DIR}
+
+
+#ENTRYPOINT ["/usr/local/bin/speedtest-cli"]
