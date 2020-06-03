@@ -1,11 +1,11 @@
 #!/bin/bash
 while [ 1 ]
 do
-    echo "starting at:  $(date +%Y%m%d_%H%M%S)"
+    echo "starting at:  $(date +%Y%m%d_%H%M%S)"   
     # execspeedtest.sh
     datestampforfilename=$(date +%Y%m%d)
     execlocaloutputfilename="/tmp/speedtestresults.txt"
-    echo $execlocaloutputfilename
+    echo $execlocaloutputfilename 
 
     #execlocaloutputfilename="./sample.txt"
     outputdir=/output
