@@ -3,6 +3,7 @@ while [ 1 ]
 echo "ENV Variables:"
 echo "      SECONDSTOSLEEPBETWEENITERATIONS:$SECONDSTOSLEEPBETWEENITERATIONS"
 echo "                       DOCKERHOSTNAME:$DOCKERHOSTNAME"
+echo "                                   TZ:$TZ"
 
 do
     echo "starting at:  $(date +%Y%m%d_%H%M%S)"   
@@ -18,27 +19,27 @@ do
     outputfilename="$outputdir"/$datestampforfilename"_speed_test_results.csv"
     echo $outputfilename
 
-    #Check to see if we are creating a new file or appending an old one.  Add the headers if its new...
-    headerrow="Date_Time|SourceIP|UsingHost|Download|Upload"
-    [ ! -e $outputfilename ] && touch $outputfilename && echo $headerrow >>  $outputfilename
 
-    pipechar="|"
+    #Check to see if we are creating a new file or appending an old one.  Add the headers if its new...
+    headerrow="Date_Time\tSourceIP\tDockerHostName\tUsingHost\tDownload\tUpload\n"
+    [ ! -e $outputfilename ] &&  printf $headerrow >>  $outputfilename
+
     /usr/local/bin/speedtest-cli > "$execlocaloutputfilename"
-    lineout=$(date +%Y%m%d_%H%M%S)
+    lineout=$(date +%Y%m%d_%H%M%S_%Z)
     #echo $lineout
 
     #add the docker hostname to the row
     val=""
     val=$DOCKERHOSTNAME
     echo $val
-    lineout=$lineout$pipechar$val
+    lineout="$lineout\t$val"
 
 
     #get the source IP from the output
     val=""
     val=$(grep  'Testing from ' $execlocaloutputfilename) 
     val=$(echo $val | grep --perl-regexp -o '(?<=\().*(?=\))')
-    lineout=$lineout$pipechar$val
+    lineout="$lineout\t$val"
 
     #get the destination host info provided
     val=""
@@ -48,7 +49,7 @@ do
     #echo $charstosave
     val=${val: -$charstosave}
     #echo $val
-    lineout=$lineout$pipechar$val
+    lineout="$lineout\t$val"
     #echo $lineout
 
 
@@ -60,7 +61,7 @@ do
     #echo $charstosave
     val=${val: -$charstosave}
     #echo $val
-    lineout=$lineout$pipechar$val
+    lineout="$lineout\t$val"
     #echo $lineout
 
     #get the u[] speed
@@ -71,10 +72,10 @@ do
     #echo $charstosave
     val=${val: -$charstosave}
     #echo $val
-    lineout=$lineout$pipechar$val
-    echo $lineout >> $outputfilename
-    echo $lineout
+    lineout="$lineout\t$val"
+    printf "$lineout\n" >> $outputfilename
+    printf "$lineout\n"
     echo "ended at:  $(date +%Y%m%d_%H%M%S)"
-    echo "sleeping varialbe SECONDSTOSLEEPBETWEENITERATIONS=$SECONDSTOSLEEPBETWEENITERATIONS"
+    echo "sleeping variable SECONDSTOSLEEPBETWEENITERATIONS=$SECONDSTOSLEEPBETWEENITERATIONS"
     sleep $SECONDSTOSLEEPBETWEENITERATIONS
 done
