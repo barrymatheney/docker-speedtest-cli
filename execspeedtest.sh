@@ -1,5 +1,9 @@
 #!/bin/bash
 while [ 1 ]
+echo "ENV Variables:"
+echo "      SECONDSTOSLEEPBETWEENITERATIONS:$SECONDSTOSLEEPBETWEENITERATIONS"
+echo "                       DOCKERHOSTNAME:$DOCKERHOSTNAME"
+
 do
     echo "starting at:  $(date +%Y%m%d_%H%M%S)"   
     # execspeedtest.sh
@@ -23,12 +27,18 @@ do
     lineout=$(date +%Y%m%d_%H%M%S)
     #echo $lineout
 
+    #add the docker hostname to the row
+    val=""
+    val=$DOCKERHOSTNAME
+    echo $val
+    lineout=$lineout$pipechar$val
+
+
     #get the source IP from the output
     val=""
     val=$(grep  'Testing from ' $execlocaloutputfilename) 
     val=$(echo $val | grep --perl-regexp -o '(?<=\().*(?=\))')
     lineout=$lineout$pipechar$val
-    echo $lineout
 
     #get the destination host info provided
     val=""
@@ -63,6 +73,7 @@ do
     #echo $val
     lineout=$lineout$pipechar$val
     echo $lineout >> $outputfilename
+    echo $lineout
     echo "ended at:  $(date +%Y%m%d_%H%M%S)"
     echo "sleeping varialbe SECONDSTOSLEEPBETWEENITERATIONS=$SECONDSTOSLEEPBETWEENITERATIONS"
     sleep $SECONDSTOSLEEPBETWEENITERATIONS
