@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Script to build the container locally
+. ./docker_setvars.sh
 
-image=loopingspeedtester && \
-    tag=latest && \
-    docker build --rm -t $image:$tag -f Dockerfile  .
+docker build --rm -t $image:$tag -f Dockerfile  .
