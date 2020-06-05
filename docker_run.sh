@@ -3,6 +3,7 @@
 #Script to execute the container
 . ./docker_setvars.sh
 
+
 hostype="$(uname -s)"
 case "${hostype}" in
     Linux*)     hosttype=Linux;hostmountpoint=/tmp/output;;
@@ -17,7 +18,7 @@ echo "The output files will be written to by the container in the directory:  ${
 
 if [ ${hosttype} = "Linux" ] 
     then if [ "$EUID" -ne 0 ]
-        then echo "Both creating the mount directory and executing Docker require running as root, and you are not... Exiting"
+        then echo "Both creating the mount directory and executing Docker requires running as root, and you are not... Exiting"
         exit
     fi
 fi
