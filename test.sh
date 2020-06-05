@@ -9,4 +9,4 @@ host_ip=$(getent ahosts "$host" | awk '{print $1; exit}')
 
 # only list the interface used to reach a specific host/IP. We only want the part
 # between dev and src (use grep for that)
-ip route get "$host_ip" | grep -Po '(?<=(dev )).*(?= src| proto)'
+ip route get "$host_ip" | grep -Po '(?<=(dev )).*(?= src| proto)'  

@@ -8,7 +8,7 @@ case "${hostype}" in
     Linux*)     hosttype=Linux;hostmountpoint=/tmp/output;;
     Darwin*)    hosttype=Mac;hostmountpoint=/tmp/output;;
     CYGWIN*)    hosttype=Cygwin;hostmountpoint="/c/temp/output";;
-    MINGW*)     hosttype=MinGw;hostmountpoint="/c/temp/output";;
+    MINGW*)     hosttype=MinGw;hostmountpoint="/c/temp/output";;  
     *)          hosttype="UNKNOWN:${unameOut}"
 esac
 

@@ -9,7 +9,7 @@ do
     echo "starting at:  $(date +%Y%m%d_%H%M%S)"   
     # execspeedtest.sh
     datestampforfilename=$(date +%Y%m%d)
-    execlocaloutputfilename="/tmp/speedtestresults.txt"
+    execlocaloutputfilename="/tmp/speedtestresults.txt"  
     echo $execlocaloutputfilename 
 
     #execlocaloutputfilename="./sample.txt"
@@ -18,7 +18,7 @@ do
     [ ! -d $outputdir ] && mkdir $outputdir
     outputfilename="$outputdir"/$datestampforfilename"_speed_test_results.csv"
     echo $outputfilename
-
+  
 
     #Check to see if we are creating a new file or appending an old one.  Add the headers if its new...
     headerrow="Date_Time\tSourceIP\tDockerHostName\tUsingHost\tDownload\tUpload\n"

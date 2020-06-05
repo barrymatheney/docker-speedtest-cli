@@ -17,3 +17,4 @@ COPY . .
 
 #ENTRYPOINT ["/usr/local/bin/speedtest-cli"]
 ENTRYPOINT ["./execspeedtest.sh"]
+  

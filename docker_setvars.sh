@@ -5,3 +5,4 @@ image=loopingspeedtester
 tag=latest
 TZ="America/New_York"
 outdir="/output"
+  
